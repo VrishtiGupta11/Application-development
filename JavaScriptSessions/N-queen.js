@@ -1,5 +1,7 @@
 var prompt = require("prompt-sync")();
 
+// Printing Chessboard
+
 const whiteSquare = "\u2B1C";
 const blackSquare = "\u2B1B";
 
@@ -26,6 +28,8 @@ for(let i=0; i<8; i++) {
     output += '\n';
 }
 
+// Placing Queens on chessboard
+
 let blackQueen = "\u265B";
 let whiteQueen = "\u2655";
 
@@ -40,7 +44,8 @@ if(N > 0) {
     outputList[0] = whiteQueen + " ";
 }
 
-for(let i = 0; i<N-1; i++) {
+let i = 0;
+while(i<N-1) {
     [qR, qC] = prompt("Enter queen position splitted by space: ").split(" ");
     
     if(qRowList.includes(qR) || qcolList.includes(qC)) {
@@ -55,6 +60,8 @@ for(let i = 0; i<N-1; i++) {
             outputList[Number(qR*8) + Number(qC)] = blackQueen + " ";
         else if(outputList[Number(qR*8) + Number(qC)] == blackSquare) 
             outputList[Number(qR*8) + Number(qC)] = whiteQueen + " ";
+        
+        i++;
     }
 }
 
