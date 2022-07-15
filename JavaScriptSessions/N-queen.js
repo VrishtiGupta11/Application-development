@@ -25,7 +25,6 @@ for(let i=0; i<8; i++) {
     }
     output += '\n';
 }
-// console.log(output)
 
 let blackQueen = "\u265B";
 let whiteQueen = "\u2655";
