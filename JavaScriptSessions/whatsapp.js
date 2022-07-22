@@ -116,6 +116,64 @@ let myWhatsApp = [conversation1, conversation2, conversation3, conversation4, co
 console.log(myWhatsApp)
 console.table(myWhatsApp)
 
+// 1.
+// conversations with high messages should be above
+// sort conversations on the bases of messages length
+
+// 2. sort on the bases of text length 
+
+function sortConversationsBasedOnMessages(myWhatsApp) {
+    // let noOfConversations = myWhatsApp.length;
+    // for(let conversation of myWhatsApp) {
+    //     let N = conversation["messages"].length;
+        
+    // }
+    console.table(myWhatsApp);
+    let N = myWhatsApp.length;
+    for(let i=0; i<N; i++) {
+        for(let j=0; j<N-i-1; j++) {
+            // console.log(i, j);
+            if(myWhatsApp[j]["messages"].length > myWhatsApp[j+1]["messages"].length) {
+                let temp = myWhatsApp[j];
+                myWhatsApp[j] = myWhatsApp[j+1];
+                myWhatsApp[j+1] = temp;
+            }
+        }
+    }
+    console.table(myWhatsApp)
+}
+
+function sortMessagesBasedOnText() {
+    let textAdd = []
+    let N = myWhatsApp.length;
+    for(let j=0; j<N; j++) {
+        let addedText = "";
+        for(let k=0; k<myWhatsApp[j]["messages"].length; k++) {
+            addedText += myWhatsApp[j]["messages"][k]["text"];
+        }
+        textAdd.push(addedText);
+    }
+    console.log(textAdd);
+
+    for(let i=0; i<N; i++) {
+        for(let j=0; j<N-i-1; j++) {
+            if(textAdd[j] > textAdd[j+1]) {
+                let temp1 = textAdd[j];
+                textAdd[j] = textAdd[j+1];
+                textAdd[j+1] = temp1;
+
+                let temp = myWhatsApp[j];
+                myWhatsApp[j] = myWhatsApp[j+1];
+                myWhatsApp[j+1] = temp;
+            }
+        }
+    }
+    // console.table(myWhatsApp)
+    // for(let conversation of myWhatsApp) {
+    //     for(let message of )
+    // }
+}
+
 // let conversation in myWhatsApp -> It will iterate over keys
 // let conversation of myWhatsApp -> It will iterate over values
 
@@ -152,6 +210,8 @@ function sortMessagesBasedOnlength() {
         }
     }
     console.table(messages);
+
+    // Bubble sort
     for(let i=0; i<messages.length; i++) {
         for(let j=0; j<messages.length - i -1; j++) {
             if(messages[j].length > messages[j+1].length) {
@@ -169,7 +229,7 @@ let input = "yes";
 while(input == "yes") {
     options = ["Filter messages", "Search by Sender Number", "Sort based on message length"]
     console.table(options);
-    let option = Number(prompt("Select an option (0, 1, 2): "));
+    let option = Number(prompt("Select an option (0, 1, 2, 3, 4): "));
 
     // features
 
@@ -183,6 +243,10 @@ while(input == "yes") {
     }
     else if(option == 2)
         sortMessagesBasedOnlength();
+    else if(option == 3)
+        sortConversationsBasedOnMessages(myWhatsApp);
+    else if(option == 4) 
+        sortMessagesBasedOnText();
     else
         console.log("Invalid Option");
     input = prompt("Type yes to continue or quit to stop: ")
