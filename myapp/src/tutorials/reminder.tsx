@@ -1,34 +1,87 @@
 import React from 'react'
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { List, Colors, Card } from 'react-native-paper';
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import { Button, IconButton,List,Colors } from 'react-native-paper';
 // import { List,Icon } from 'react-native-paper/lib/typescript/components/List/List';
 // import { Icon } from 'react-native-paper/lib/typescript/components/Avatar/Avatar';
 
-// FontAwesomeIcon.library.add(faTrashAlt);
-
-// const MyComponent = () => (
-//   <>
-//     <List.Icon color={Colors.blue500} icon="folder" />
-//     <List.Icon color={Colors.blue500} icon="equal" />
-//     <List.Icon color={Colors.blue500} icon="calendar" />
-//   </>
-// );
+// Icons from react native paper
+// https://materialdesignicons.com/
 
 export default function Reminder() {
 
-    const card = (() => {
-        return 
-    })
+    const myList = ["Reminder", "Family"];
+    const colorsList = [Colors.yellow800, Colors.yellow600];
+
+    const number = 8;
+
+    function card() {
+      return myList.map((element, index) => {
+        return (
+        <View key={index} style={{flexDirection: 'column'}}>
+          <View style={styles.listItem}>
+            <View style={styles.listItemLeft}>
+              <View style={[styles.circle, {backgroundColor: colorsList[index]}]}>
+                <List.Icon color={Colors.white} icon="menu" style={styles.icon}></List.Icon>
+              </View>
+              <Text style={styles.listText}>{element}</Text>
+            </View>
+            <View style={styles.listItemLeft}>
+              <Text style={[styles.listText, {color: Colors.grey500}]}>{number}</Text>
+              <List.Icon icon="chevron-right" color={Colors.grey700}></List.Icon>
+            </View>
+          </View>
+          <View style={styles.divider}></View>
+        </View>
+        )
+      })
+    }
 
     return (
       <View style={styles.container}>
-        {/* <FontAwesomeIcon icon={"square-check"}></FontAwesomeIcon> */}
-        <Text>This is My Reminder</Text>
-        {/* <Button icon={"camera"}> Hello </Button> */}
-        {/* <Icon icon={"camera"}></Icon> */}
-        {/* <List.Icon color={Colors.blue500} icon="folder" /> */}
-        {/* <Icon */}
+        
+        <Text style={styles.editText}>Edit</Text>
+
+        <View style={styles.cardContainer}>
+          <View style={styles.card}>
+            <View>
+              <View style={[styles.circle, {backgroundColor: Colors.blue500}]}><List.Icon color={Colors.white} icon="calendar" style={styles.icon} /></View>
+              <Text style={styles.cardText}>Today</Text>
+            </View>
+            <Text style={styles.text}>{number}</Text>
+          </View>
+
+          <View style={styles.card}>
+            <View>
+              <View style={[styles.circle, {backgroundColor: Colors.red400}]}><List.Icon color={Colors.white} icon="keyboard" style={styles.icon} /></View>
+              <Text style={styles.cardText}>Scheduled</Text>
+            </View>
+            <Text style={styles.text}>{number}</Text>
+          </View>
+        </View>
+
+        <View style={styles.cardContainer}>
+          <View style={styles.card}>
+            <View>
+              <View style={[styles.circle, {backgroundColor: Colors.blueGrey500}]}><List.Icon color={Colors.white} icon="purse" style={styles.icon} /></View>
+              <Text style={styles.cardText}>All</Text>
+            </View>
+            <Text style={styles.text}>{number}</Text>
+          </View>
+
+          <View style={styles.card}>
+            <View>
+              <View style={[styles.circle, {backgroundColor: Colors.yellow800}]}><List.Icon color={Colors.white} icon="flag" style={styles.icon} /></View>
+              <Text style={styles.cardText}>Flagged</Text>
+            </View>
+            <Text style={styles.text}>{number}</Text>
+          </View>
+        </View>
+
+        <Text style={styles.text}>My Lists</Text>
+        <View style={styles.listContainer}>{card()}</View>
+
       </View>
     )
   }
@@ -36,8 +89,91 @@ export default function Reminder() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: 'black',
+      padding: 20,
     },
+
+    editText: {
+      fontSize: 17,
+      color: Colors.blue500, 
+      textAlign: "right", 
+      marginTop: 10,
+      marginBottom: 15,
+    },
+
+    cardContainer: {
+      flexDirection: 'row',
+    },
+
+    card: {
+      width: "47%",
+      // height: 85,
+      flexDirection: 'row',
+      backgroundColor: Colors.grey900,
+      margin: 8,
+      padding: 10,
+      borderRadius: 10,
+      justifyContent: "space-between",
+    },
+
+    icon: {
+      alignSelf: "center",
+      top: -12,
+    },
+    
+    cardText: {
+      fontSize: 16,
+      color: Colors.grey500,
+      marginTop: 12
+    },
+
+    text: {
+      color: Colors.white,
+      fontSize: 25,
+      fontWeight: 'bold',
+      marginRight: 10,
+      marginLeft: 20,
+    },
+    
+    circle: {
+      height:32, 
+      width:32, 
+      borderRadius:15,
+    },
+
+    listContainer: {
+      width: "98%",
+      // height: 100,
+      backgroundColor: Colors.grey900,
+      flexDirection: "column",
+      margin: 10,
+      borderRadius: 15,
+    }, 
+
+    listItem: {
+      alignItems: "center",
+      flexDirection: "row",
+      paddingLeft: 10,
+      justifyContent: "space-between",
+    },
+
+    listText: {
+      fontSize: 18,
+      color: Colors.grey300,
+      marginLeft: 20,
+    },
+
+    listItemLeft: {
+      alignItems: "center",
+      flexDirection: "row",
+    },
+
+    divider: {
+      height: 1,
+      width: "80%",
+      backgroundColor: Colors.grey800,
+      alignSelf: "flex-end",
+      marginRight: 15,
+      marginBottom: 2,
+    }
   });

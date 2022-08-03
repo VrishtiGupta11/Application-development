@@ -90,7 +90,7 @@ export default function App() {
         <Tab.Screen name='Profile' component={ProfileScreen}/>
         <Tab.Screen name='Orders' component={OrdersScreen}/>
         {/* <Tab.Screen name='news-api' component={NewsApp}/> */}
-        <Tab.Screen name='Whatsapp' component={Whatsapp}/>
+        {/* <Tab.Screen name='Whatsapp' component={Whatsapp}/> */}
         <Tab.Screen name='class-component' component={ClassComponent}/>
         <Tab.Screen name='Reminder' component={Reminder}/>
         <Tab.Screen name="SignIn" component={SignInScreen}/>

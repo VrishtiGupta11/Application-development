@@ -184,8 +184,8 @@ export default function Whatsapp() {
   }
 
   function buttons() {
-    return myWhatsApp.map((object: any) => {
-      return <TouchableHighlight onPress={(event) => setIIndex(myWhatsApp.indexOf(object))}>
+    return myWhatsApp.map((object, index) => {
+      return <TouchableHighlight key={index} onPress={(event) => setIIndex(myWhatsApp.indexOf(object))}>
         <View style={styles.button}>
           <View style={styles.circle}></View>
           {/* <image></image> */}
