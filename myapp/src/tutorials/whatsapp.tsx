@@ -174,8 +174,8 @@ export default function Whatsapp() {
   }
   
   function chat(conversation: any) {
-    return conversation["messages"].map((object: any) => {
-      return <View style= {{width: 170}}>
+    return conversation["messages"].map((object: any, index: any) => {
+      return <View key={index} style= {{width: 170}}>
         <Text style = {styles.chatStyle}>{object["text"]}</Text>
         <Text style = {[styles.timsStampStyle]}>{object["timeStamp"]+'\n\n'}</Text>
       </View>

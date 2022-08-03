@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { List, Colors, Card } from 'react-native-paper';
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import { Button, IconButton,List,Colors } from 'react-native-paper';
@@ -102,11 +102,14 @@ export default function Reminder() {
     },
 
     cardContainer: {
+      width: Platform.OS === "android" ? "100%": "50%",
+      alignSelf: "center",
       flexDirection: 'row',
+      justifyContent: "center"
     },
 
     card: {
-      width: "47%",
+      width: Platform.OS === "android" ? "48%": "100%",
       // height: 85,
       flexDirection: 'row',
       backgroundColor: Colors.grey900,
@@ -142,12 +145,13 @@ export default function Reminder() {
     },
 
     listContainer: {
-      width: "98%",
+      width: "100%",
       // height: 100,
       backgroundColor: Colors.grey900,
       flexDirection: "column",
       margin: 10,
       borderRadius: 15,
+      alignSelf: "center"
     }, 
 
     listItem: {
