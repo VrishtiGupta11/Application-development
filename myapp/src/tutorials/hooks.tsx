@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Hooks() {
@@ -11,9 +11,15 @@ export default function Hooks() {
         console.log("CounterCounter "+counter);
     })
     const sortNumbers = (() => {
-        setNumbers([...[], numbers.sort()]);
+        // setNumbers([...[], numbers.sort()]);
         console.log("NumbersNumbers " + numbers)
     })
+
+    // useEffect(()=>{
+    //     // let num = [4, 1, 6, 9, 7];
+    //     numbers.sort()
+    //     setNumbers(numbers);
+    // });
 
     return (
         <View style={styles.container}>

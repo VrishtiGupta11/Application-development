@@ -2,41 +2,61 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react'
 import { Button, Image, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Colors, IconButton, List } from 'react-native-paper';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, getFirestore, setDoc } from "firebase/firestore"; 
 
-export default function SignInScreen({navigation}: any) {
+export default function RegisterScreen({navigation}: any) {
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    function navigateToRegisterScreen() {
-      navigation.navigate("Register");
+    // secure the password using hashing and SHA 256
+
+    function navigateToSignInScreen() {
+      navigation.navigate("SignIn");
     }
 
-    function signIn() {
+    // https://firebase.google.com/docs/auth/web/start
+    // https://firebase.google.com/docs/firestore/manage-data/add-data#web-version-9_1
 
-      console.log("Email: "+email+" password: "+password);
+    function register() {
+      // getAuth()      // reference of authentication
+      console.log("Name: "+name+" email: "+email+" password: "+password)
 
       const auth = getAuth();
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+      const db = getFirestore();
+
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          console.log("user Logged In..."+user.uid);
+          console.log("User registered...")
           // ...
-        }).then(()=>{
-          navigation.navigate("Home");}
-        )
+
+          const docToInsert = {
+            name: name,
+            email: email,
+            password: password,
+          };
+
+          setDoc(doc(db, "users", user.uid), docToInsert);
+          navigation.navigate("Home")
+          
+          console.log("Details added to firestore");
+        })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log("Error occured..." + errorCode + " " + errorMessage);
-        });
+    // ..
+      });
+
     }
 
     return (
       <LinearGradient colors={["#007A9C", "#99E3EE", "#026F8C"]} style={styles.container}>
-        <Text style={styles.heading}>Login</Text>
+        <Text style={styles.heading}>Register</Text>
         <View style={styles.signInContainer}>
           {/* <List.Icon icon='account-circle' color="#013352" style={styles.icon}></List.Icon> */}
           <Image 
@@ -45,6 +65,13 @@ export default function SignInScreen({navigation}: any) {
           ></Image>
           <TextInput 
             style={styles.input} 
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+          ></TextInput>
+
+          <TextInput 
+            style={styles.input}
             placeholder="Email Id"
             value={email}
             onChangeText={setEmail}
@@ -56,17 +83,17 @@ export default function SignInScreen({navigation}: any) {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
-            ></TextInput>
+          ></TextInput>
 
           {/* <Button title='Sign In' onPress={signIn}></Button> */}
-          <TouchableOpacity  onPress={signIn}>
+          <TouchableOpacity  onPress={register}>
             <View style={styles.button}>
-              <Text style={styles.textStyle}>Sign In</Text>
+              <Text style={styles.textStyle}>Register</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={navigateToRegisterScreen}>
-            <Text style={styles.text}>New User? Register Here</Text>
+          <TouchableOpacity onPress={navigateToSignInScreen}>
+            <Text style={styles.text}>Existing User? Login Here</Text>
           </TouchableOpacity>
           {/* <Text>{email}</Text> */}
         </View>
