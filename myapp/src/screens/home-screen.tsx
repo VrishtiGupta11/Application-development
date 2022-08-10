@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { List, Colors, Card } from 'react-native-paper';
+import React, { useEffect, useState } from 'react'
+import { Platform, StatusBar, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { List, Colors, Card, ActivityIndicator, IconButton } from 'react-native-paper';
 import { collection, getDoc, getDocs, getFirestore } from 'firebase/firestore';
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import { Button, IconButton,List,Colors } from 'react-native-paper';
@@ -10,129 +10,144 @@ import { collection, getDoc, getDocs, getFirestore } from 'firebase/firestore';
 // Icons from react native paper
 // https://materialdesignicons.com/
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}:any) {
+
+  const [crossingList, setCrossingList] = useState([]);
 
   const getCrossings = async () => {
+    let documents:any = [];
     try{
       const db = getFirestore();
-      const documents = [];
       const querySnapshots = await getDocs(collection(db, "crossings"));
+
       querySnapshots.forEach((doc)=>{
-        console.log(doc.id + " => " + doc.data);
+        // console.log(doc.id + " => " + doc.data);
         const docData = doc.data();
         documents.push(docData);
       })
+      // console.log("documents: ");
+      // console.log(documents);
+      setCrossingList(documents);
     }
     catch(error) {
       console.log("Something went wrong..");
     }
   }
-    
 
   useEffect(()=>{
     getCrossings();
+  }, [])
+
+  let list = crossingList.map((element, index) => {
+    // console.log(element);
+    return (
+      <View key={index} style={styles.cardContainer}>
+        {element["imageURL"] != null ? <Image 
+            source={{uri: element["imageURL"]}}
+            style={styles.image}
+            onError={()=>(<Text>Image Not Found</Text>)}            
+            >
+        </Image> : <ActivityIndicator/>}
+        <View style={styles.text}>
+          <Text>{element["name"]}</Text>
+          {element["status"] == 0 ? 
+          <View style={styles.circleStatus}>
+            <View style={[styles.circle, {backgroundColor: Colors.green800}]}></View>
+            <Text>OPENED</Text> 
+          </View> : 
+            (element["status"] == 1 ? 
+              <View style={styles.circleStatus}>
+                <View style={[styles.circle, {backgroundColor: Colors.red800}]}></View>
+                <Text>CLOSED</Text> 
+              </View> : 
+              (element["status"] == 2 ? 
+                <View style={styles.circleStatus}>
+                  <View style={[styles.circle, {backgroundColor: Colors.green100}]}></View>
+                  <Text>OPENING</Text> 
+                </View> : 
+                <View style={styles.circleStatus}>
+                  <View style={[styles.circle, {backgroundColor: Colors.orange800}]}></View>
+                  <Text>CLOSING</Text> 
+                </View>
+              )
+            )
+          }
+        </View>
+      </View>
+    )
   })
+  
 
     return (
-      <View style={styles.container}>
-        <Text>Welcome to Home</Text>
-      </View>
+      <ScrollView>
+        {/* <View style={styles.header}>
+          <Text style={styles.headerText}>PHATAK STATUS</Text>
+          <View style={styles.headerIconContainer}>
+            <IconButton icon={"map"} color="white"></IconButton>
+            <IconButton icon={"logout"} color="white"></IconButton>
+          </View>
+        </View> */}
+        <View style={styles.container}>
+          {list}
+        </View>
+        <IconButton icon={"map"} size={50} style={styles.icon} onPress={() => navigation.navigate('MapScreen')}></IconButton>
+      </ScrollView>
     )
   }
   
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      // backgroundColor: 'black',
       padding: 20,
-    },
-
-    editText: {
-      fontSize: 17,
-      color: Colors.blue500, 
-      textAlign: "right", 
-      marginTop: 10,
-      marginBottom: 15,
-    },
-
-    cardContainer: {
-      width: Platform.OS === "android" ? "100%": "50%",
-      alignSelf: "center",
-      flexDirection: 'row',
-      justifyContent: "center"
-    },
-
-    card: {
-      width: Platform.OS === "android" ? "48%": "100%",
-      // height: 85,
-      flexDirection: 'row',
-      backgroundColor: Colors.grey900,
-      margin: 8,
-      padding: 10,
-      borderRadius: 10,
-      justifyContent: "space-between",
+      alignItems: "center"
+      // justifyContent: "center"
     },
 
     icon: {
-      alignSelf: "center",
-      top: -12,
-    },
-    
-    cardText: {
-      fontSize: 16,
-      color: Colors.grey500,
-      marginTop: 12
+      marginRight: 20,
+      alignSelf: "flex-end",
+      backgroundColor: Colors.grey400, 
     },
 
-    text: {
-      color: Colors.white,
-      fontSize: 25,
-      fontWeight: 'bold',
-      marginRight: 10,
-      marginLeft: 20,
-    },
-    
-    circle: {
-      height:32, 
-      width:32, 
-      borderRadius:15,
+    cardContainer: {
+      width: Platform.OS === "android" ? "100%": "30%",
+      paddingBottom: 20,
+      borderRadius: 20,
+      marginBottom: 20,
+      backgroundColor: Colors.grey200,
+      shadowColor: 'black',
+      shadowOpacity: 0.26,
+      shadowOffset: { width: 1, height: 3},
+      shadowRadius: 10,
+      elevation: 5,
     },
 
-    listContainer: {
+    image: {
       width: "100%",
-      // height: 100,
-      backgroundColor: Colors.grey900,
-      flexDirection: "column",
-      margin: 10,
-      borderRadius: 15,
-      alignSelf: "center"
+      height: 200,
+      marginBottom: 10,
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
     }, 
 
-    listItem: {
-      alignItems: "center",
+    text: {
+      paddingHorizontal: 5,
       flexDirection: "row",
-      paddingLeft: 10,
       justifyContent: "space-between",
     },
 
-    listText: {
-      fontSize: 18,
-      color: Colors.grey300,
-      marginLeft: 20,
+    circle: {
+      height:10, 
+      width:10, 
+      borderRadius:15,
+      top: 5,
+      marginRight: 5,
     },
 
-    listItemLeft: {
-      alignItems: "center",
+    circleStatus: {
       flexDirection: "row",
-    },
-
-    divider: {
-      height: 1,
-      width: "80%",
-      backgroundColor: Colors.grey800,
-      alignSelf: "flex-end",
-      marginRight: 15,
-      marginBottom: 2,
+      // width: 75,
+      justifyContent: "space-between",
     }
   });
 

@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -19,8 +19,10 @@ import {initializeApp} from "firebase/app";
 import { firebaseConfig } from "./src/helper/constants";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Appbar } from "react-native-paper";
+import { Appbar, Colors, FAB, IconButton } from "react-native-paper";
 import HomeScreen from "./src/screens/home-screen";
+import MapScreen from "./src/screens/map-view";
+import React from 'react'
 
 /*
 https://reactnavigation.org/docs/getting-started/
@@ -90,7 +92,9 @@ export default function App() {
 //   )
 // }
 
-export default function App() {
+export default function App({navigation}:any) {
+
+  // const navigation = useNavigation();
 
   const [showSplash, setShowSplash] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -143,10 +147,7 @@ export default function App() {
       // }finally{
       //   console.log("Finally Executed..");
       // }
-
-    },
-      
-    []);
+    }, []);
 
     if(showSplash){
       return (
@@ -160,27 +161,54 @@ export default function App() {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name='Home' component={HomeScreen} options={{
+          <Stack.Screen name='Home' component={HomeScreen} 
+          options={{
+            // headerBackButtonMenuEnabled: true,
+            // statusBarHidden: true,
+            // headerShown: false,
             title: "Phatak App",
-            headerRight: ()=>(
-              <Appbar.Action icon={"logout"} onPress={()=>{
-                const auth = getAuth();
-                auth.signOut().then(()=>{setLoggedIn(false); setShowSplash(true)});
-                // setLoggedIn(false);
-                // setShowSplash(true)
-              }}>
+            headerTitleStyle: {color: Colors.white},
+            headerLeft: ()=> null,
+            headerRight: ()=>( 
+              <Appbar style={{backgroundColor: "#007A9C"}}> 
+                {/* <Appbar.Action icon={"map-marker-multiple"} color={Colors.white} onPress={()=>
+                  navigation.navigate('MapScreen')
+                }>
+                </Appbar.Action>
 
-              </Appbar.Action>
-            )
-          }}/>
+                <Appbar.Action icon={"logout"} color={Colors.white} onPress={()=>{
+                  const auth = getAuth();
+                  auth.signOut().then(()=>{setLoggedIn(false); setShowSplash(true)});
+                }}>
+                </Appbar.Action> */}
+                <View style={styles.header}>
+                  <Text style={styles.headerText}>PHATAK STATUS</Text>
+                  <View style={styles.headerIconContainer}>
+                    <IconButton icon={"map"} color="white" onPress={() => navigation.navigate('MapScreen')}></IconButton>
+                    <IconButton icon={"logout"} color="white" onPress={()=>
+                    {
+                      const auth = getAuth();
+                      auth.signOut().then(()=>{setLoggedIn(false); setShowSplash(true)});
+                    }}></IconButton>
+                  </View>
+                </View>
+              </Appbar>
+            ),
+            headerStyle: {
+              backgroundColor: "#007A9C",
+            },
+            headerTitleAlign: "center",
+          }}
+          />
           <Stack.Screen name='Profile' component={ProfileScreen}/>
           <Stack.Screen name='Orders' component={OrdersScreen}/>
           {/* <Stack.Screen name='news-api' component={NewsApp}/> */}
           <Stack.Screen name='Whatsapp' component={Whatsapp}/>
-          <Stack.Screen name='class-component' component={ClassComponent}/>
+          <Stack.Screen name='ClassComponent' component={ClassComponent}/>
           <Stack.Screen name='Reminder' component={Reminder}/>
           <Stack.Screen name="SignIn" component={SignInScreen}/>
           <Stack.Screen name="Register" component={RegisterScreen}/>
+          <Stack.Screen name="MapScreen" component={MapScreen}/>
           {/* <Stack.Screen name='Hooks' component={Hooks}/> */}
         </Stack.Navigator>
       </NavigationContainer>
@@ -197,8 +225,16 @@ export default function App() {
           <Stack.Screen name='Whatsapp' component={Whatsapp}/>
           <Stack.Screen name='class-component' component={ClassComponent}/>
           <Stack.Screen name='Reminder' component={Reminder}/>
-          <Stack.Screen name="SignIn" component={SignInScreen}/>
+          <Stack.Screen name="SignIn" component={SignInScreen} options={{
+            // title: "Sign In",
+            // headerTitleAlign: "center",
+            // headerStyle: {
+            //   backgroundColor: Colors.blueGrey700,
+            // },
+            headerShown: false,
+          }}/>
           <Stack.Screen name="Register" component={RegisterScreen}/>
+          <Stack.Screen name="MapScreen" component={MapScreen}/>
           {/* <Stack.Screen name='Hooks' component={Hooks}/> */}
         </Stack.Navigator>
       </NavigationContainer>
@@ -231,5 +267,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  header: {
+    height: 80,
+    width: "100%",
+    backgroundColor: "#007A9C",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  headerText: {
+    alignSelf: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white"
+  },
+
+  headerIconContainer: {
+    position: "absolute",
+    flexDirection: "row",
+    right: 10
   },
 });
