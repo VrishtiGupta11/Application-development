@@ -42,14 +42,16 @@ export default function HomeScreen({navigation}:any) {
     // console.log(element);
     return (
       <View key={index} style={styles.cardContainer}>
-        {element["imageURL"] != null ? <Image 
-            source={{uri: element["imageURL"]}}
+        {/* {element["phatakImage"] != null ?  */}
+        <Image 
+            source={{uri: element["phatakImage"]}}
             style={styles.image}
             onError={()=>(<Text>Image Not Found</Text>)}            
             >
-        </Image> : <ActivityIndicator/>}
+        </Image> 
+         {/* : <ActivityIndicator/>} */}
         <View style={styles.text}>
-          <Text>{element["name"]}</Text>
+          <Text>{element["phatakName"]}</Text>
           {element["status"] == 0 ? 
           <View style={styles.circleStatus}>
             <View style={[styles.circle, {backgroundColor: Colors.green800}]}></View>

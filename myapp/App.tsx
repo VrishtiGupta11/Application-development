@@ -1,6 +1,6 @@
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from "./src/functional-component/home"
 import ProfileScreen from "./src/functional-component/profile"
@@ -152,7 +152,19 @@ export default function App({navigation}:any) {
     if(showSplash){
       return (
         <View style={styles.container}>
-          <Text>Phatak Status</Text>
+          <Image 
+            source={require('D:/Users/Documents/react_native/Application-development/myapp/assets/phatak-status.png')}
+            style={styles.splashImage}
+            onError={()=>(<Text>Image Not Found</Text>)}            
+            >
+        </Image> 
+          <Image 
+            source={require('D:/Users/Documents/react_native/Application-development/myapp/assets/loader.gif')}
+            style={styles.loader}
+            onError={()=>(<Text>Image Not Found</Text>)}            
+            >
+        </Image> 
+          <Text style={styles.splashText}>Phatak Status</Text>
         </View>
       );
     }
@@ -184,7 +196,7 @@ export default function App({navigation}:any) {
                 <View style={styles.header}>
                   <Text style={styles.headerText}>PHATAK STATUS</Text>
                   <View style={styles.headerIconContainer}>
-                    <IconButton icon={"map"} color="white" onPress={() => navigation.navigate('MapScreen')}></IconButton>
+                    {/* <IconButton icon={"map"} color="white" onPress={() => navigation.navigate('MapScreen')}></IconButton> */}
                     <IconButton icon={"logout"} color="white" onPress={()=>
                     {
                       const auth = getAuth();
@@ -264,7 +276,7 @@ export default function App({navigation}:any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.grey200,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -290,4 +302,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     right: 10
   },
+
+  splashText: {
+    fontWeight: "bold",
+    fontSize: 30,
+    color: "#013352",
+  },
+
+  splashImage: {
+    width: 180,
+    height: 180
+  },
+  
+  loader: {
+    width: 140,
+    height: 140
+  }
 });
